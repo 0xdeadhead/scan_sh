@@ -6,6 +6,7 @@ while true; do
     rm *.zip
     wget -q https://chaos-data.projectdiscovery.io/index.json
     jq ".[] | if .bounty and .count < 300 then .URL else null end" index.json | grep -v "null" | sed 's/"//g' | parallel -j 10 wget -q {}
+    programs=0
     for zip in *.zip; do
         dir=$(echo $zip | cut -f 1 -d .)
         [[ -d "${dir}_dir" ]] || mkdir "${dir}_dir"
@@ -19,6 +20,9 @@ while true; do
             [[ -f "${dir}_${hosts}_report"]] && python3 ../../notify.py --file "${dir}_${hosts}_report"
         done
         cd ..
+    ((programs++))
     done
     cd ..
+    python3 notify.py --plain_msg "scan completed for ${programs} programs"
+    break
 done
