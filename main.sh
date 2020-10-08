@@ -12,6 +12,7 @@ while true; do
         unzip -o $zip -d "${dir}_dir"
         cd "${dir}_dir"
         rm *_alive.txt*
+        rm *_report*
         for hosts in *.txt; do
             httpx -l $hosts -threads 100 -o "${hosts}_alive.txt" -no-color -silent -follow-redirects
             nuclei -t $HOME/nuclei-templates -o "${dir}_${hosts}_report" -silent -l "${hosts}_alive.txt"
