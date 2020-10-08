@@ -16,8 +16,8 @@ while true; do
         rm *_report*
         for hosts in *.txt; do
             httpx -l $hosts -threads 100 -o "${hosts}_alive.txt" -no-color -silent -follow-redirects
-            nuclei -t $HOME/nuclei-templates -o "${dir}_${hosts}_report" -silent -l "${hosts}_alive.txt"
-            [[ -f "${dir}_${hosts}_report"]] && python3 ../../notify.py --file "${dir}_${hosts}_report"
+            nuclei -t $HOME/nuclei-templates -o "${dir}_${hosts}_report" -v -l "${hosts}_alive.txt"
+            [[ -f "${dir}_${hosts}_report" ]] && python3 ../../notify.py --file "${dir}_${hosts}_report"
         done
         cd ..
     ((programs++))
